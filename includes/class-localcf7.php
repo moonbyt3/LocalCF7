@@ -197,13 +197,9 @@ class Localcf7 {
     public function toplevel_page() {
         echo "<h2>" . __( 'Welcome to LocalCF7 page', 'myplugin-menu' ) . "</h2>";
 		// include 'My-admin.php';
-		global $wpdb;
+		$data = $this->get_localCF7_form_data();
 
-		$table_name = $wpdb->prefix . "LocalCF7";
-
-		$data = $wpdb->get_results( "SELECT * FROM $table_name" );
-
-		var_dump($data);
+		// var_dump($data);
 
 
 		if ( ! class_exists( 'WP_List_Table' ) ) {
@@ -213,6 +209,7 @@ class Localcf7 {
 
 		$this->localCF7TableObj = new LocalCF7Table();
 
+		$this->localCF7TableObj->prepare_items();
 		$this->localCF7TableObj->display();
 	}
 	
