@@ -14,11 +14,7 @@
                 
                             var showFormButtons = jQuery('.localcf7-table-form__btn');
                             if (showFormButtons.length > 0) {
-                                for (let i = 0; i < showFormButtons.length; i++) {
-                                    console.log(i);
-                                }
                                 showFormButtons.each(function (i, element) {
-                                    console.log(i);
                                     jQuery(element).on('click', function() {
                                         console.log(this);
                                         if (!jQuery(this).parent().hasClass('localcf7-table-form--active')) {
@@ -31,20 +27,43 @@
                                     });
                                 });
                             }
+
                     </script>
                     ";
                     break;
             }
         }
         
-        function get_columns() {
+        public function get_columns() {
             $columns = array(
-                'title' => 'From Name',
-                'postedAt' => 'Posted At',
-                'formData' => 'Form Data'
-                );
+                'title' => __('From Name', 'localCF7'),
+                'postedAt' => __('Posted At', 'localCF7'),
+                'formData' => __('Form Data', 'localCF7')
+            );
             return $columns;
            
+        }
+
+        /**
+         * Columns to make sortable.
+         *
+         * @return array
+         */
+        public function get_sortable_columns(){
+            return array('title' => array('title', false));
+        }
+
+        /**
+        * Render the bulk edit checkbox
+        *
+        * @param array $item
+        *
+        * @return string
+        */
+        public function column_cb( $item ) {
+            return sprintf(
+                '<input type="checkbox" name="bulk-delete[]" value="%s" />', $item['user_id']
+            );
         }
 
         function prepare_items() {
@@ -61,6 +80,10 @@
             $this->items = $data;
         }
 
+        private function strip_slashes_and_capitalize($str) {
+            return ucwords(implode(' ', explode('-', $str)));
+        }
+
         function column_default( $item, $column_name ) {
             $data = json_decode(json_encode($item), true); // converts stdClass to array
 
@@ -71,13 +94,12 @@
                 break;
               case 'formData':
                 $form_data = unserialize($data[$column_name]);
-                // print_r($form_data);
                 $html .= '<div class="localcf7-table-form">';
                 $html .= '<button class="localcf7-table-form__btn">Show Form Data</button>';
                 $html .= '<div class="localcf7-table-form-data">';
                     $html .= '<div class="localcf7-table-form-data-wrap">';
                         foreach($form_data as $form_row_key => $form_row_value) {
-                            $html .= $form_row_key . ": " . $form_row_value . "<br>";
+                            $html .= '<span class="localcf7-table-form-data-label">' . $this->strip_slashes_and_capitalize($form_row_key) . ":</span> " . $form_row_value . "<br>";
                         }
                         $html .= '</div>';
                     $html .= '</div>';

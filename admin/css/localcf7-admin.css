@@ -32,4 +32,9 @@
 
 .localcf7-table-form--active .localcf7-table-form-data-wrap {
     margin-top: 0;
+    padding: 5px;
+}
+
+.localcf7-table-form-data-label {
+    font-weight: bold;
 }
