@@ -196,11 +196,8 @@ class Localcf7 {
 	// Displays the page content for the custom Toplevel menu
     public function toplevel_page() {
         echo "<h2>" . __( 'Welcome to LocalCF7 page', 'myplugin-menu' ) . "</h2>";
-		// include 'My-admin.php';
+		
 		$data = $this->get_localCF7_form_data();
-
-		// var_dump($data);
-
 
 		if ( ! class_exists( 'WP_List_Table' ) ) {
 			require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
@@ -236,9 +233,6 @@ class Localcf7 {
 
 			// $data->posted_data <- ovde se nalaze svi inputi
 
-			// return $this->plugin->saveFormData($data);
-			// var_dump($data->posted_data);
-			// die;
 			$wpdb->insert('wp_LocalCF7', array(
 				'title' => $data->title,
 				'postedAt' => current_time('mysql'),

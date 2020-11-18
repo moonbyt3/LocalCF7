@@ -2,3 +2,34 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+
+.localcf7-table-form {
+
+}
+
+.localcf7-table-form__btn {
+    color: #0073aa;
+    border: 1px solid rgb(197, 197, 197);
+    transition: 0.3s ease-in;
+    background: #efefef;
+    cursor: pointer;
+    min-width: 110px;
+}
+
+.localcf7-table-form__btn:hover {
+    color: #00496b;
+    background: #dadada;
+}
+
+.localcf7-table-form-data {
+    overflow: hidden;
+}
+
+.localcf7-table-form-data-wrap {
+    transition: 0.3s ease-in-out;
+    margin-top: -100%;
+}
+
+.localcf7-table-form--active .localcf7-table-form-data-wrap {
+    margin-top: 0;
+}

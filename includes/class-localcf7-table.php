@@ -2,17 +2,40 @@
 
     class LocalCF7Table extends WP_List_Table {
 
-        // function extra_tablenav( $which ) {
-        //     switch ( $which ) {
-        //         case 'top':
-        //             echo 'top';
-        //             break;
+        function extra_tablenav( $which ) {
+            switch ( $which ) {
+                case 'top':
+                    echo 'top';
+                    break;
 
-        //         case 'bottom':
-        //             echo 'bottom';
-        //             break;
-        //     }
-        // }
+                case 'bottom':
+                    echo "
+                    <script>
+                
+                            var showFormButtons = jQuery('.localcf7-table-form__btn');
+                            if (showFormButtons.length > 0) {
+                                for (let i = 0; i < showFormButtons.length; i++) {
+                                    console.log(i);
+                                }
+                                showFormButtons.each(function (i, element) {
+                                    console.log(i);
+                                    jQuery(element).on('click', function() {
+                                        console.log(this);
+                                        if (!jQuery(this).parent().hasClass('localcf7-table-form--active')) {
+                                            jQuery(this).parent().addClass('localcf7-table-form--active');
+                                            jQuery(this).text('Hide Form Data');
+                                        } else {
+                                            jQuery(this).parent().removeClass('localcf7-table-form--active');
+                                            jQuery(this).text('Show Form Data');
+                                        }
+                                    });
+                                });
+                            }
+                    </script>
+                    ";
+                    break;
+            }
+        }
         
         function get_columns() {
             $columns = array(
@@ -49,11 +72,17 @@
               case 'formData':
                 $form_data = unserialize($data[$column_name]);
                 // print_r($form_data);
-                $result = "";
-                foreach($form_data as $form_row_key => $form_row_value) {
-                    $result .= $form_row_key . ": " . $form_row_value . "<br>";
-                }
-                return $result;
+                $html .= '<div class="localcf7-table-form">';
+                $html .= '<button class="localcf7-table-form__btn">Show Form Data</button>';
+                $html .= '<div class="localcf7-table-form-data">';
+                    $html .= '<div class="localcf7-table-form-data-wrap">';
+                        foreach($form_data as $form_row_key => $form_row_value) {
+                            $html .= $form_row_key . ": " . $form_row_value . "<br>";
+                        }
+                        $html .= '</div>';
+                    $html .= '</div>';
+                $html .= '</div>';
+                return $html;
               default:
                 return print_r( $data, true ) ; //Show the whole array for troubleshooting purposes
             }
