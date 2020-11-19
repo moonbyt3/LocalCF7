@@ -7,7 +7,6 @@
                 case 'top':
                     echo 'top';
                     break;
-
                 case 'bottom':
                     echo "
                     <script>
@@ -44,34 +43,12 @@
            
         }
 
-        /**
-         * Columns to make sortable.
-         *
-         * @return array
-         */
-        public function get_sortable_columns(){
-            return array('title' => array('title', false));
-        }
-
-        /**
-        * Render the bulk edit checkbox
-        *
-        * @param array $item
-        *
-        * @return string
-        */
-        public function column_cb( $item ) {
-            return sprintf(
-                '<input type="checkbox" name="bulk-delete[]" value="%s" />', $item['user_id']
-            );
-        }
-
         function prepare_items() {
             global $wpdb;
     
             $table_name = $wpdb->prefix . "LocalCF7";
     
-            $data = $wpdb->get_results( "SELECT * FROM $table_name" );
+            $data = $wpdb->get_results( "SELECT * FROM $table_name ORDER BY postedAt DESC" );
 
             $columns = $this->get_columns();
             $hidden = array();

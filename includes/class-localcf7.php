@@ -258,7 +258,6 @@ class Localcf7 {
                 $data['title'] = $cf7->title();
                 $data['posted_data'] = $submission->get_posted_data();
                 $data['uploaded_files'] = $submission->uploaded_files();
-                $data['WPCF7_ContactForm'] = $cf7;
                 return (object) $data;
             }
         }
