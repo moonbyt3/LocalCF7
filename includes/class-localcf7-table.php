@@ -73,7 +73,7 @@
         }
 
         function column_default( $item, $column_name ) {
-            
+            $pluginDIR = plugin_dir_path();
             $data = json_decode(json_encode($item), true); // converts stdClass to array
             $html = '';
 
