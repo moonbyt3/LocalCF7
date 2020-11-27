@@ -5,7 +5,7 @@
         function extra_tablenav( $which ) {
             switch ( $which ) {
                 case 'top':
-                    echo 'top';
+                    echo '<a href="https://decem.co" target="_blank" class="cf7-link">Developed with ❤️ by Decem</a>';
                     break;
                 case 'bottom':
                     echo "
@@ -57,12 +57,25 @@
             $this->items = $data;
         }
 
-        private function strip_slashes_and_capitalize($str) {
-            return ucwords(implode(' ', explode('-', $str)));
+        private function format_form_data($str) {
+            if (strpos($str, '<!DOCTYPE html>') !== false) {
+                $d = new DOMDocument;
+                $mock = new DOMDocument;
+                $d->loadHTML($str);
+                $body = $d->getElementsByTagName('body')->item(0);
+                foreach ($body->childNodes as $child){
+                    $mock->appendChild($mock->importNode($child, true));
+                }
+
+                $str = $mock->saveHTML();
+            }
+            return $str;
         }
 
         function column_default( $item, $column_name ) {
+            
             $data = json_decode(json_encode($item), true); // converts stdClass to array
+            $html = '';
 
             switch( $column_name ) { 
               case 'title':
@@ -70,14 +83,13 @@
                 return $data[ $column_name ];
                 break;
               case 'formData':
-                $form_data = unserialize($data[$column_name]);
                 $html .= '<div class="localcf7-table-form">';
-                $html .= '<button class="localcf7-table-form__btn">Show Form Data</button>';
+                $html .= '<a href="' . plugin_dir_path() . '/single-item.php' . '" class="localcf7-table-form__btn">Show Form Data</a>';
                 $html .= '<div class="localcf7-table-form-data">';
                     $html .= '<div class="localcf7-table-form-data-wrap">';
-                        foreach($form_data as $form_row_key => $form_row_value) {
-                            $html .= '<span class="localcf7-table-form-data-label">' . $this->strip_slashes_and_capitalize($form_row_key) . ":</span> " . $form_row_value . "<br>";
-                        }
+                        
+                            $html .= '<span class="localcf7-table-form-data-label">' . $this->format_form_data($data[$column_name]) . "</span> ";
+                        
                         $html .= '</div>';
                     $html .= '</div>';
                 $html .= '</div>';

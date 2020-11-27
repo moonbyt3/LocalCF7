@@ -178,7 +178,8 @@ class Localcf7 {
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
 
-		add_action('wpcf7_before_send_mail', array(&$this, 'saveFormData'));
+		// add_action('wpcf7_before_send_mail', array(&$this, 'saveFormData'));
+		add_filter('wp_mail', array(&$this, 'saveMail'));
 	}
 
 	// Add Menu Page
@@ -190,9 +191,18 @@ class Localcf7 {
             'local-cf7-menu', //menu_slug
             array($this, 'toplevel_page'), //function
             'dashicons-buddicons-activity' //icon url
-        );
+		);
+		add_options_page(
+			'WPSE 4677 Page title',
+			'WPSE 4677 Menu item title',
+			'manage_options', // Minimum capability to view this page
+			'wpse4677-page-identifier', // Unique identifier
+			array($this, 'single_page') // Callback function to get the contents
+		);
 	}
-	
+	public function single_page() {
+		echo 'qwe';
+	}
 	// Displays the page content for the custom Toplevel menu
     public function toplevel_page() {
         echo "<h2>" . __( 'Welcome to LocalCF7 page', 'myplugin-menu' ) . "</h2>";
@@ -218,6 +228,26 @@ class Localcf7 {
 		$data = $wpdb->get_results( "SELECT * FROM $table_name" );
 
 		return $data;
+	}
+
+	public function saveMail($args) {
+		
+		$data = $args['message'];
+
+		$res = explode(':', $data, 2);
+
+		try {
+			global $wpdb;
+			$wpdb->insert('wp_LocalCF7', array(
+				'title' => $data->title,
+				'postedAt' => current_time('mysql'),
+				'formData' => $data
+			));
+
+		}
+		catch (Exception $ex) {
+			$this->plugin->getErrorLog()->logException($ex);
+		}
 	}
 
 	/**
